@@ -1,69 +1,96 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import React, { useState } from 'react';
+import { TodoProvider, useTodo } from '@/context/TodoContext';
+import { ZenBackground } from '@/components/ZenBackground';
+import { Header } from '@/components/Header';
+import { ListView } from '@/components/ListView';
+import { KanbanBoard } from '@/components/KanbanBoard';
+import { InsightsGraph } from '@/components/InsightsGraph';
+import { SpotlightModal } from '@/components/SpotlightModal';
+import { ShortcutModal } from '@/components/ShortcutModal';
+import { LoginModal } from '@/components/LoginModal';
+import { QuickAddModal } from '@/components/QuickAddModal';
+import { ToastNotification } from '@/components/ToastNotification';
+import { LandingHero } from '@/components/LandingHero';
+import { Plus } from 'lucide-react';
+
+function TodoAppContent() {
+  const { viewMode, isFocusMode, currentUser } = useTodo();
+  const [isQuickAddOpen, setIsQuickAddOpen] = useState(false);
+  const [isGuestExploring, setIsGuestExploring] = useState(false);
+
+  // If user is authenticated, they are always in the App Dashboard.
+  // Unauthenticated guests only see the dashboard if they click 'Buka Dashboard Penuh (Guest Mode)'.
+  const showDashboard = Boolean(currentUser || isGuestExploring);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="relative min-h-screen text-slate-800 flex flex-col justify-between selection:bg-teal-500/25 selection:text-teal-900 font-sans">
+      {/* Zen Misty Landscape Background */}
+      <ZenBackground isFocusMode={isFocusMode} />
+
+      {/* Main App Container */}
+      {!showDashboard ? (
+        <main className="flex-1 flex flex-col justify-center">
+          <LandingHero onEnterApp={() => setIsGuestExploring(true)} />
+        </main>
+      ) : (
+        <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-6 md:py-8 transition-opacity duration-500">
+          {/* Guest exploring banner (only shown if not logged in) */}
+          {!currentUser && (
+            <div className="mb-4 flex items-center justify-between p-3 rounded-2xl glass-panel bg-teal-50/80 border border-teal-200 text-xs text-teal-900 font-medium">
+              <span>Mode Penjelajah Tamu — Masuk atau daftar akun agar tugas Anda tersimpan permanen di cloud pribadi.</span>
+              <button
+                onClick={() => setIsGuestExploring(false)}
+                className="ml-3 text-teal-700 hover:text-teal-950 font-bold underline cursor-pointer shrink-0"
+              >
+                Halaman Zen
+              </button>
+            </div>
+          )}
+
+          {/* Dynamic Header */}
+          <Header onOpenQuickAdd={() => setIsQuickAddOpen(true)} />
+
+          {/* View Mode Switching */}
+          <section className="transition-all duration-300">
+            {viewMode === 'list' && <ListView />}
+            {viewMode === 'kanban' && <KanbanBoard />}
+            {viewMode === 'insights' && <InsightsGraph />}
+          </section>
+
+          {/* Floating Action Button (FAB) for mobile ergonomics */}
+          <div className="md:hidden fixed bottom-6 right-6 z-40">
+            <button
+              onClick={() => setIsQuickAddOpen(true)}
+              aria-label="Tambah Tugas"
+              className="w-14 h-14 rounded-full bg-teal-600 text-white flex items-center justify-center shadow-2xl shadow-teal-600/40 active:scale-90 transition-transform cursor-pointer"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+              <Plus className="w-6 h-6 stroke-[2.5]" />
+            </button>
+          </div>
+        </main>
+      )}
+
+      {/* Footer */}
+      <footer className="w-full py-4 text-center text-[11px] font-medium text-slate-500 border-t border-slate-200/60 relative z-10 backdrop-blur-md bg-white/40">
+        Crafted with Apple Light Glassmorphic aesthetics & 10 Nielsen Usability Heuristics • Powered by Next.js & Supabase
+      </footer>
+
+      {/* Modals & Overlays */}
+      <SpotlightModal />
+      <ShortcutModal />
+      <LoginModal />
+      <QuickAddModal isOpen={isQuickAddOpen} onClose={() => setIsQuickAddOpen(false)} />
+      <ToastNotification />
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <TodoProvider>
+      <TodoAppContent />
+    </TodoProvider>
   );
 }
