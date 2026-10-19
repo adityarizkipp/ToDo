@@ -9,7 +9,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "ZenTask — Minimalist Apple-like To-Do & Productivity",
+  title: "Clawdo — Minimalist To-Do & Productivity",
   description: "Aesthetic Zen light mode to-do list with Apple frosted glass, NLP Quick Capture, and Supabase integration.",
 };
 

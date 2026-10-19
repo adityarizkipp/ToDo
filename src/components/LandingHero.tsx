@@ -48,8 +48,8 @@ export const LandingHero: React.FC<LandingHeroProps> = ({ onEnterApp }) => {
           transition={{ delay: 0.2 }}
           className="mt-5 text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-2xl mx-auto"
         >
-          Aplikasi To-Do List modern bergaya Apple glassmorphism dengan latar pemandangan alam Zen,
-          dirancang presisi sesuai 10 Heuristik Usability Nielsen Norman dan integrasi Supabase.
+          Keluarkan semua isi kepalamu dalam hitungan detik. Nikmati ruang kerja yang tenang dengan suasana alam Zen,
+          dirancang untuk membantumu menyelesaikan hal penting tanpa rasa cemas.
         </motion.p>
 
         {/* CTA Buttons */}

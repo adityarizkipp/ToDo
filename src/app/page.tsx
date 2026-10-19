@@ -74,7 +74,7 @@ function TodoAppContent() {
 
       {/* Footer */}
       <footer className="w-full py-4 text-center text-[11px] font-medium text-slate-500 border-t border-slate-200/60 relative z-10 backdrop-blur-md bg-white/40">
-        Crafted with Apple Light Glassmorphic aesthetics & 10 Nielsen Usability Heuristics • Powered by Next.js & Supabase
+        Crafted with Claw's Love • Powered by Next.js & Supabase
       </footer>
 
       {/* Modals & Overlays */}
